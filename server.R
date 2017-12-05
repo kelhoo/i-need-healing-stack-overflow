@@ -8,15 +8,15 @@ all_data = get.full.data()
 
 shinyServer(function(input, output) {
   output$locations = renderPlot({
-    locations = all_data %>% select(c("Country", "Professional")) %>% 
-      filter(Professional == input$profession) %>% 
+    locations = all_data %>% select(c("Country", "Professional", "FormalEducation")) %>% 
+      filter(Professional == input$profession, FormalEducation == input$education) %>% 
       group_by(Country) %>% 
       summarise(total = n()) %>% 
       arrange(desc(total))
     min_total = locations$total[10]
     locations = locations %>% filter(total >= min_total)
     
-    ggplot(locations %>% filter(), aes(x=Country, y=total)) + 
+    ggplot(locations, aes(x=Country, y=total)) + 
       geom_col() + 
       coord_flip() + 
       labs(title = "Number of Programmers in Each Country", y="Number of People")
@@ -40,7 +40,7 @@ shinyServer(function(input, output) {
   
   output$university = renderPlot({
     university <- all_data %>%
-      filter(Professional == input$profession) %>%
+      filter(Professional == input$profession, FormalEducation == input$education) %>%
       select("University") %>%
       group_by(University) %>%
       summarise(total = n())
@@ -51,6 +51,6 @@ shinyServer(function(input, output) {
     lbls <- paste(lbls, pct)
     lbls <- paste(lbls,"%",sep="")
     pie(slices,labels = lbls, col=rainbow(length(lbls)),
-        main="Pie Chart of University Experience")
+        main="Pie Chart of Currently Enrolled")
   })
 })
