@@ -37,4 +37,20 @@ shinyServer(function(input, output) {
             axis.ticks.x=element_blank()) +
       labs(title="Types of Formal Education Programmers had", fill = "Education Type", y = "Total")
   })
+  
+  output$university = renderPlot({
+    university <- all_data %>%
+      filter(Professional == input$profession) %>%
+      select("University") %>%
+      group_by(University) %>%
+      summarise(total = n())
+    
+    slices <- university$total
+    lbls <- university$University
+    pct <- round(slices/sum(slices)*100)
+    lbls <- paste(lbls, pct)
+    lbls <- paste(lbls,"%",sep="")
+    pie(slices,labels = lbls, col=rainbow(length(lbls)),
+        main="Pie Chart of University Experience")
+  })
 })
