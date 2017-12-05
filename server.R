@@ -11,7 +11,10 @@ shinyServer(function(input, output) {
     locations = all_data %>% select(c("Country", "Professional")) %>% 
       filter(Professional == input$profession) %>% 
       group_by(Country) %>% 
-      summarise(total = n())
+      summarise(total = n()) %>% 
+      arrange(desc(total))
+    min_total = locations$total[10]
+    locations = locations %>% filter(total >= min_total)
     
     ggplot(locations %>% filter(), aes(x=Country, y=total)) + 
       geom_col() + 
