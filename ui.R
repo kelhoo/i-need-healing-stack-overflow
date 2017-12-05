@@ -6,6 +6,7 @@ library(dplyr)
 source("Data_Manipulation.R")
 professions = get.filtered.data(c("Professional")) %>% unique()
 degrees = get.filtered.data(c("FormalEducation")) %>% unique()
+majors = get.filtered.data(c("MajorUndergrad")) %>% unique()
 
 shinyUI(fluidPage(
   
@@ -21,7 +22,11 @@ shinyUI(fluidPage(
       checkboxGroupInput("education",
                          choices = degrees$FormalEducation,
                          label = "Formal Education",
-                         selected = degrees$FormalEducation)
+                         selected = degrees$FormalEducation),
+      checkboxGroupInput("major",
+                         choices = majors$MajorUndergrad,
+                         label = "Undergraduate Majors",
+                         selected = majors$MajorUndergrad)
       ),
     
       mainPanel(
@@ -29,7 +34,8 @@ shinyUI(fluidPage(
           tabPanel("Locations", plotOutput("locations")),
           tabPanel("Formal Education", plotOutput("education")),
           tabPanel("University", plotOutput("university")),
-          tabPanel("Major", plotOutput("major"))
+          tabPanel("Major", plotOutput("major")),
+          tabPanel("Job Satisfaction", plotOutput("job_satisfaction"))
           #tabPanel("Summary", verbatimTextOutput("summary")),
           #tabPanel("Table", tableOutput("table"))
         )
