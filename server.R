@@ -53,4 +53,19 @@ shinyServer(function(input, output) {
     pie(slices,labels = lbls, col=rainbow(length(lbls)),
         main="Pie Chart of Currently Enrolled")
   })
+  
+  output$major = renderPlot({
+    majors = all_data %>% 
+      select(c("MajorUndergrad", "Professional", "FormalEducation")) %>% 
+      filter(Professional == input$profession, FormalEducation == input$education) %>% 
+      group_by(MajorUndergrad) %>% 
+      summarise(total = n()) %>% 
+      arrange(desc(total))
+      percent = round(majors$total*100/sum(majors$total), 0)
+      pie(majors$total, 
+          labels = paste0(majors$MajorUndergrad, " ", percent, "%"), 
+          col=rainbow(nrow(majors), start = 0.05), 
+          main = "Pie Chart of Undergraduate Majors",
+          init.angle = 30)
+  })
 })

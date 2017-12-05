@@ -28,7 +28,8 @@ shinyUI(fluidPage(
         tabsetPanel(
           tabPanel("Locations", plotOutput("locations")),
           tabPanel("Formal Education", plotOutput("education")),
-          tabPanel("University", plotOutput("university"))
+          tabPanel("University", plotOutput("university")),
+          tabPanel("Major", plotOutput("major"))
           #tabPanel("Summary", verbatimTextOutput("summary")),
           #tabPanel("Table", tableOutput("table"))
         )
