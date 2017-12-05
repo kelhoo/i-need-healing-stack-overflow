@@ -21,4 +21,20 @@ shinyServer(function(input, output) {
       coord_flip() + 
       labs(title = "Number of Programmers in Each Country", y="Number of People")
   })
+  
+  #Makes bar plot of the different Formal Education based on profession
+  output$education = renderPlot({
+    education <- all_data %>% 
+      filter(Professional == input$profession) %>% 
+      select("FormalEducation") %>% 
+      group_by(FormalEducation) %>% 
+      summarise(total = n())
+    
+    ggplot(education, aes(x=education$FormalEducation, y=education$total, fill=education$FormalEducation)) + 
+      geom_bar(stat="identity") +
+      theme(axis.title.x=element_blank(),
+            axis.text.x=element_blank(),
+            axis.ticks.x=element_blank()) +
+      labs(title="Types of Formal Education Programmers had", fill = "Education Type", y = "Total")
+  })
 })
