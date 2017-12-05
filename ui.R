@@ -14,14 +14,14 @@ shinyUI(fluidPage(
   sidebarLayout(
     sidebarPanel(
       checkboxGroupInput("profession", 
-                         choices = professions,
+                         choices = professions$Professional,
                          label = "Profession",
-                         selected = professions)
-    )
-  ),
+                         selected = professions$Professional)
+      ),
     
-    mainPanel(
-      plotOutput("locations")
+      mainPanel(
+        plotOutput("locations")
+      )    
     )
   )
 )
