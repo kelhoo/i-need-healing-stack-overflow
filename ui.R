@@ -4,13 +4,14 @@
 library(shiny)
 library(dplyr)
 library(plotly)
+library(shinythemes)
 source("Data_Manipulation.R")
 professions = get.filtered.data(c("Professional")) %>% unique()
 degrees = get.filtered.data(c("FormalEducation")) %>% unique()
 majors = get.filtered.data(c("MajorUndergrad")) %>% unique()
-
+DEFAULT_HEIGHT = "1000px"
 shinyUI(fluidPage(
-  
+  theme = shinytheme("sandstone"),
   # Application title
   titlePanel(""),
   
@@ -34,10 +35,10 @@ shinyUI(fluidPage(
       
       mainPanel(
         tabsetPanel(
-          tabPanel("Locations", plotOutput("locations")),
+          tabPanel("Locations", plotOutput("locations", height = DEFAULT_HEIGHT)),
           #tabPanel("Formal Education", plotOutput("education")),
-          tabPanel("University", plotOutput("university")),
-          tabPanel("Major", plotOutput("major"))
+          tabPanel("University", plotOutput("university", height = DEFAULT_HEIGHT)),
+          tabPanel("Major", plotOutput("major", height = DEFAULT_HEIGHT))
           #tabPanel("Job Satisfaction", plotOutput("job_satisfaction"))
           #tabPanel("Summary", verbatimTextOutput("summary")),
           #tabPanel("Table", tableOutput("table"))
@@ -53,9 +54,9 @@ shinyUI(fluidPage(
       ),
       mainPanel(
         tabsetPanel(
-          tabPanel("Education", plotOutput("education")),
-          tabPanel("Job Satisfaction", plotOutput("job_satisfaction")),
-          tabPanel("Years Programming", plotlyOutput("years", height = "700px"))
+          tabPanel("Education", plotOutput("education", height = DEFAULT_HEIGHT)),
+          tabPanel("Job Satisfaction", plotOutput("job_satisfaction", height = DEFAULT_HEIGHT)),
+          tabPanel("Years Programming", plotlyOutput("years", height = DEFAULT_HEIGHT))
         )
       )
     )),
@@ -64,7 +65,7 @@ shinyUI(fluidPage(
       mainPanel(
         tabsetPanel(
           #tabPanel("Education", plotOutput("education")),
-          tabPanel("Languages", plotOutput("languages"))
+          tabPanel("Languages", plotOutput("languages", height = DEFAULT_HEIGHT))
         )
       )
     ))

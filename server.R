@@ -106,6 +106,7 @@ shinyServer(function(input, output) {
       group_by(YearsProgram) %>%
       summarise(total = n())
     
-    plot_ly(years, labels = years$YearsProgram, values = years$total, type = 'pie')
+    plot_ly(years, labels = years$YearsProgram, values = years$total, type = 'pie') %>%
+      layout(showlegend = TRUE)
   })
 })
