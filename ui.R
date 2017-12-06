@@ -14,7 +14,7 @@ shinyUI(fluidPage(
   titlePanel(""),
   
   shinyUI(navbarPage("My Application",
-    tabPanel("Component 1", sidebarLayout(
+    tabPanel("Page 1", sidebarLayout(
       
       sidebarPanel(
         checkboxGroupInput("profession", 
@@ -36,28 +36,37 @@ shinyUI(fluidPage(
           tabPanel("Locations", plotOutput("locations")),
           #tabPanel("Formal Education", plotOutput("education")),
           tabPanel("University", plotOutput("university")),
-          tabPanel("Major", plotOutput("major")),
-          tabPanel("Job Satisfaction", plotOutput("job_satisfaction"))
+          tabPanel("Major", plotOutput("major"))
+          #tabPanel("Job Satisfaction", plotOutput("job_satisfaction"))
           #tabPanel("Summary", verbatimTextOutput("summary")),
           #tabPanel("Table", tableOutput("table"))
         )
       )    
-    )
-    ), 
-    tabPanel("Test", sidebarLayout(
+    )), 
+    tabPanel("Page 2", sidebarLayout(
       sidebarPanel(
-        checkboxGroupInput("profession", 
+        checkboxGroupInput("profession2", 
                            choices = professions$Professional,
                            label = "Profession",
                            selected = professions$Professional)
       ),
       mainPanel(
         tabsetPanel(
-          tabPanel("Education", plotOutput("education"))
+          tabPanel("Education", plotOutput("education")),
+          tabPanel("Job Satisfaction", plotOutput("job_satisfaction")),
+          tabPanel("Years Programming", plotlyOutput("years", height = "700px"))
         )
       )
-    )
-    )
+    )),
+    tabPanel("Page 3", sidebarLayout(
+      sidebarPanel(),
+      mainPanel(
+        tabsetPanel(
+          #tabPanel("Education", plotOutput("education")),
+          tabPanel("Languages", plotOutput("languages"))
+        )
+      )
+    ))
   ))
   )
 )

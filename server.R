@@ -3,6 +3,7 @@
 
 library(shiny)
 library(ggplot2)
+library(plotly)
 source("Data_Manipulation.R")
 all_data = get.full.data()
 
@@ -25,7 +26,7 @@ shinyServer(function(input, output) {
   #Makes bar plot of the different Formal Education based on profession
   output$education = renderPlot({
     education <- all_data %>% 
-      filter(Professional == input$profession) %>% 
+      filter(Professional == input$profession2) %>% 
       select("FormalEducation") %>% 
       group_by(FormalEducation) %>% 
       summarise(total = n())
@@ -38,6 +39,7 @@ shinyServer(function(input, output) {
       labs(title="Types of Formal Education Programmers had", fill = "Education Type", y = "Total")
   })
   
+  #renders a piechart of people currently enrolled in University
   output$university = renderPlot({
     university <- all_data %>%
       filter(Professional == input$profession, FormalEducation == input$education, MajorUndergrad == input$major) %>%
@@ -72,11 +74,42 @@ shinyServer(function(input, output) {
   
   output$job_satisfaction = renderPlot({
     careers = get.filtered.data(c("MajorUndergrad", "Professional", "JobSatisfaction")) %>% 
-      filter(Professional == input$profession, JobSatisfaction != "NA")
+      filter(Professional == input$profession2, JobSatisfaction != "NA")
     
     ggplot(careers, aes(x=MajorUndergrad, y=JobSatisfaction)) + 
       geom_boxplot(col = rainbow(careers$MajorUndergrad %>% unique() %>% length)) + 
       coord_flip() + 
       labs(title = "Box Plot of Job Satisfaction Based on Major", x="Undergraduate Major", y="Job Satisfaction")
+  })
+  
+  output$languages = renderPlot({
+    data <- all_data %>%
+      select("HaveWorkedLanguage") %>%
+      group_by(HaveWorkedLanguage) %>%
+      summarise(total = n()) %>%
+      filter(total > 500, HaveWorkedLanguage != "NA") %>%
+      arrange(desc(total))
+    
+    ggplot(data, aes(x=data$HaveWorkedLanguage, y=data$total, fill=data$HaveWorkedLanguage)) + 
+      geom_bar(stat="identity") +
+      theme(axis.title.x=element_blank(),
+            axis.text.x=element_blank(),
+            axis.ticks.x=element_blank()) +
+      labs(title="Languages Programmers Used", fill = "Languages", y = "Total")
+  })
+  
+  #renders a piechart of years programmed
+  output$years <- renderPlotly({
+    years <- all_data %>%
+      filter(Professional == input$profession2, YearsProgram != "null") %>%
+      select("YearsProgram", "Professional") %>%
+      group_by(YearsProgram, Professional) %>%
+      summarise(total = n())
+    
+    
+    plot_ly(years, labels = years$YearsProgram, values = years$total, type = 'pie') %>%
+      layout(title = 'Years Programming',
+             xaxis = list(showgrid = FALSE, zeroline = FALSE, showticklabels = FALSE),
+             yaxis = list(showgrid = FALSE, zeroline = FALSE, showticklabels = FALSE))
   })
 })
