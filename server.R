@@ -8,6 +8,7 @@ source("Data_Manipulation.R")
 all_data = get.full.data()
 
 shinyServer(function(input, output) {
+  #renders plot of given locations 
   output$locations = renderPlot({
     locations = all_data %>% select(c("Country", "Professional", "FormalEducation", "MajorUndergrad")) %>% 
       filter(Professional %in% input$profession, FormalEducation %in% input$education, MajorUndergrad %in% input$major) %>% 
@@ -56,6 +57,7 @@ shinyServer(function(input, output) {
         main="Pie Chart of Currently Enrolled")
   })
   
+  #Renders a piechart of Undergraduate Majors that respondents had
   output$major = renderPlot({
     majors = all_data %>% 
       select(c("MajorUndergrad", "Professional", "FormalEducation")) %>% 
@@ -72,6 +74,7 @@ shinyServer(function(input, output) {
         init.angle = 30)
   })
   
+  #Renders a boxplot of the level of job satisfaction based on their MajorUndergrad
   output$job_satisfaction = renderPlot({
     careers = get.filtered.data(c("MajorUndergrad", "Professional", "JobSatisfaction")) %>% 
       filter(Professional %in% input$profession2, JobSatisfaction != "NA")
@@ -82,6 +85,7 @@ shinyServer(function(input, output) {
       labs(title = "Box Plot of Job Satisfaction Based on Major", x="Undergraduate Major", y="Job Satisfaction")
   })
   
+  #renders a plot of the most popular languages that have been worked on that have more than 500 mentions
   output$languages = renderPlot({
     data <- all_data %>%
       select("HaveWorkedLanguage") %>%
@@ -108,20 +112,6 @@ shinyServer(function(input, output) {
     
     plot_ly(years, labels = years$YearsProgram, values = years$total, type = 'pie') %>%
       layout(showlegend = TRUE)
-  })
-  output$locations = renderPlot({
-    locations = all_data %>% select(c("Country", "Professional", "FormalEducation", "MajorUndergrad")) %>% 
-      filter(Professional %in% input$profession, FormalEducation %in% input$education, MajorUndergrad %in% input$major) %>% 
-      group_by(Country) %>% 
-      summarise(total = n()) %>% 
-      arrange(desc(total))
-    min_total = locations$total[10]
-    locations = locations %>% filter(total >= min_total)
-    
-    ggplot(locations, aes(x=Country, y=total)) + 
-      geom_col() + 
-      coord_flip() + 
-      labs(title = "Number of Programmers in Each Country", y="Number of People")
   })
   
   #Makes bar plot based on the company sizes each person is currently in

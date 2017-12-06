@@ -37,22 +37,20 @@ shinyUI(fluidPage(
       mainPanel(
         tabsetPanel(
           tabPanel("Locations", plotOutput("locations", height = DEFAULT_HEIGHT)),
-          #tabPanel("Formal Education", plotOutput("education")),
           tabPanel("University", plotOutput("university", height = DEFAULT_HEIGHT)),
           tabPanel("Major", plotOutput("major", height = DEFAULT_HEIGHT))
-          #tabPanel("Job Satisfaction", plotOutput("job_satisfaction"))
-          #tabPanel("Summary", verbatimTextOutput("summary")),
-          #tabPanel("Table", tableOutput("table"))
         )
       )    
     )), 
     tabPanel("Employees", sidebarLayout(
+      
       sidebarPanel(
         checkboxGroupInput("profession2", 
                            choices = professions$Professional,
                            label = "Profession",
                            selected = professions$Professional)
       ),
+      
       mainPanel(
         tabsetPanel(
           tabPanel("Education", plotOutput("education", height = DEFAULT_HEIGHT)),
@@ -65,7 +63,6 @@ shinyUI(fluidPage(
       sidebarPanel(),
       mainPanel(
         tabsetPanel(
-          #tabPanel("Education", plotOutput("education")),
           tabPanel("Languages", plotOutput("languages", height = DEFAULT_HEIGHT)),
           tabPanel("Company Sizes", plotOutput("sizes", height = DEFAULT_HEIGHT))
         )
