@@ -16,8 +16,8 @@ shinyUI(fluidPage(
   # Application title
   titlePanel(""),
   
-  shinyUI(navbarPage("My Application",
-    tabPanel("Page 1", sidebarLayout(
+  shinyUI(navbarPage("Programming, Is It For You?",
+    tabPanel("Students", sidebarLayout(
       
       sidebarPanel(
         checkboxGroupInput("profession", 
@@ -46,7 +46,7 @@ shinyUI(fluidPage(
         )
       )    
     )), 
-    tabPanel("Page 2", sidebarLayout(
+    tabPanel("Employees", sidebarLayout(
       sidebarPanel(
         checkboxGroupInput("profession2", 
                            choices = professions$Professional,
@@ -61,7 +61,7 @@ shinyUI(fluidPage(
         )
       )
     )),
-    tabPanel("Page 3", sidebarLayout(
+    tabPanel("Additional Information", sidebarLayout(
       sidebarPanel(),
       mainPanel(
         tabsetPanel(
