@@ -1,7 +1,8 @@
 #this file is for loading in data and filtering out specific columns
 library(dplyr)
+library(data.table)
 
-full_data = read.csv("data/survey_results_public.csv")
+full_data = fread("data/survey_results_public.csv", sep = ",")
 
 get.filtered.data = function(columns)
 {

@@ -25,7 +25,7 @@ shinyServer(function(input, output) {
   #Makes bar plot of the different Formal Education based on profession
   output$education = renderPlot({
     education <- all_data %>% 
-      filter(Professional == input$profession, MajorUndergrad == input$major) %>% 
+      filter(Professional == input$profession) %>% 
       select("FormalEducation") %>% 
       group_by(FormalEducation) %>% 
       summarise(total = n())
@@ -72,7 +72,7 @@ shinyServer(function(input, output) {
   
   output$job_satisfaction = renderPlot({
     careers = get.filtered.data(c("MajorUndergrad", "Professional", "JobSatisfaction")) %>% 
-      filter(Professional == input$profession, JobSatisfaction != "NA", MajorUndergrad == input$major)
+      filter(Professional == input$profession, JobSatisfaction != "NA")
     
     ggplot(careers, aes(x=MajorUndergrad, y=JobSatisfaction)) + 
       geom_boxplot(col = rainbow(careers$MajorUndergrad %>% unique() %>% length)) + 
