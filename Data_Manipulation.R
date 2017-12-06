@@ -2,7 +2,7 @@
 library(dplyr)
 library(data.table)
 
-full_data = fread("data/survey_results_public.csv", sep = ",")
+full_data = fread("Data/survey_results_public.csv", sep = ",")
 
 get.filtered.data = function(columns)
 {
