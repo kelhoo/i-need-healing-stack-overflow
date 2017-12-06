@@ -26,7 +26,7 @@ shinyServer(function(input, output) {
   #Makes bar plot of the different Formal Education based on profession
   output$education = renderPlot({
     education <- all_data %>% 
-      filter(Professional %in% input$profession2) %>% 
+      filter(Professional %in% input$profession2) %>%  
       select("FormalEducation") %>% 
       group_by(FormalEducation) %>% 
       summarise(total = n())
@@ -108,5 +108,37 @@ shinyServer(function(input, output) {
     
     plot_ly(years, labels = years$YearsProgram, values = years$total, type = 'pie') %>%
       layout(showlegend = TRUE)
+  })
+  output$locations = renderPlot({
+    locations = all_data %>% select(c("Country", "Professional", "FormalEducation", "MajorUndergrad")) %>% 
+      filter(Professional %in% input$profession, FormalEducation %in% input$education, MajorUndergrad %in% input$major) %>% 
+      group_by(Country) %>% 
+      summarise(total = n()) %>% 
+      arrange(desc(total))
+    min_total = locations$total[10]
+    locations = locations %>% filter(total >= min_total)
+    
+    ggplot(locations, aes(x=Country, y=total)) + 
+      geom_col() + 
+      coord_flip() + 
+      labs(title = "Number of Programmers in Each Country", y="Number of People")
+  })
+  
+  #Makes bar plot based on the company sizes each person is currently in
+  output$sizes = renderPlot({
+    sizes <- all_data %>% 
+      select("CompanySize") %>% 
+      group_by(CompanySize) %>% 
+      summarise(total = n()) %>%
+      filter(CompanySize != "NA") 
+
+    
+    ggplot(sizes, aes(x=sizes$CompanySize, y=sizes$total, fill=sizes$CompanySize)) + 
+      geom_bar(stat="identity") +
+      theme(axis.title.x=element_blank(),
+            axis.text.x=element_blank(),
+            axis.ticks.x=element_blank()) +
+      labs(title="Company Sizes from each respondent", fill = "Company Sizes", y = "Total")
+
   })
 })

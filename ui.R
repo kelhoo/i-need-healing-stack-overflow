@@ -9,6 +9,7 @@ source("Data_Manipulation.R")
 professions = get.filtered.data(c("Professional")) %>% unique()
 degrees = get.filtered.data(c("FormalEducation")) %>% unique()
 majors = get.filtered.data(c("MajorUndergrad")) %>% unique()
+sizes = get.filtered.data(c("CompanySize")) %>% unique()
 DEFAULT_HEIGHT = "1000px"
 shinyUI(fluidPage(
   theme = shinytheme("sandstone"),
@@ -65,7 +66,8 @@ shinyUI(fluidPage(
       mainPanel(
         tabsetPanel(
           #tabPanel("Education", plotOutput("education")),
-          tabPanel("Languages", plotOutput("languages", height = DEFAULT_HEIGHT))
+          tabPanel("Languages", plotOutput("languages", height = DEFAULT_HEIGHT)),
+          tabPanel("Company Sizes", plotOutput("sizes", height = DEFAULT_HEIGHT))
         )
       )
     ))
