@@ -3,6 +3,7 @@
 
 library(shiny)
 library(dplyr)
+library(plotly)
 source("Data_Manipulation.R")
 professions = get.filtered.data(c("Professional")) %>% unique()
 degrees = get.filtered.data(c("FormalEducation")) %>% unique()

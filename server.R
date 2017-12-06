@@ -10,7 +10,7 @@ all_data = get.full.data()
 shinyServer(function(input, output) {
   output$locations = renderPlot({
     locations = all_data %>% select(c("Country", "Professional", "FormalEducation", "MajorUndergrad")) %>% 
-      filter(Professional == input$profession, FormalEducation == input$education, MajorUndergrad == input$major) %>% 
+      filter(Professional %in% input$profession, FormalEducation %in% input$education, MajorUndergrad %in% input$major) %>% 
       group_by(Country) %>% 
       summarise(total = n()) %>% 
       arrange(desc(total))
@@ -26,7 +26,7 @@ shinyServer(function(input, output) {
   #Makes bar plot of the different Formal Education based on profession
   output$education = renderPlot({
     education <- all_data %>% 
-      filter(Professional == input$profession2) %>% 
+      filter(Professional %in% input$profession2) %>% 
       select("FormalEducation") %>% 
       group_by(FormalEducation) %>% 
       summarise(total = n())
@@ -42,7 +42,7 @@ shinyServer(function(input, output) {
   #renders a piechart of people currently enrolled in University
   output$university = renderPlot({
     university <- all_data %>%
-      filter(Professional == input$profession, FormalEducation == input$education, MajorUndergrad == input$major) %>%
+      filter(Professional %in% input$profession, FormalEducation %in% input$education, MajorUndergrad %in% input$major) %>%
       select("University") %>%
       group_by(University) %>%
       summarise(total = n())
@@ -59,7 +59,7 @@ shinyServer(function(input, output) {
   output$major = renderPlot({
     majors = all_data %>% 
       select(c("MajorUndergrad", "Professional", "FormalEducation")) %>% 
-      filter(Professional == input$profession, FormalEducation == input$education, MajorUndergrad == input$major) %>% 
+      filter(Professional %in% input$profession, FormalEducation %in% input$education, MajorUndergrad %in% input$major) %>% 
       group_by(MajorUndergrad) %>% 
       summarise(total = n()) %>% 
       arrange(desc(total))
@@ -74,7 +74,7 @@ shinyServer(function(input, output) {
   
   output$job_satisfaction = renderPlot({
     careers = get.filtered.data(c("MajorUndergrad", "Professional", "JobSatisfaction")) %>% 
-      filter(Professional == input$profession2, JobSatisfaction != "NA")
+      filter(Professional %in% input$profession2, JobSatisfaction != "NA")
     
     ggplot(careers, aes(x=MajorUndergrad, y=JobSatisfaction)) + 
       geom_boxplot(col = rainbow(careers$MajorUndergrad %>% unique() %>% length)) + 
@@ -97,19 +97,15 @@ shinyServer(function(input, output) {
             axis.ticks.x=element_blank()) +
       labs(title="Languages Programmers Used", fill = "Languages", y = "Total")
   })
-  
+
   #renders a piechart of years programmed
   output$years <- renderPlotly({
     years <- all_data %>%
-      filter(Professional == input$profession2, YearsProgram != "null") %>%
-      select("YearsProgram", "Professional") %>%
-      group_by(YearsProgram, Professional) %>%
+      filter(Professional %in% input$profession2, YearsProgram != "null") %>%
+      select("YearsProgram") %>%
+      group_by(YearsProgram) %>%
       summarise(total = n())
     
-    
-    plot_ly(years, labels = years$YearsProgram, values = years$total, type = 'pie') %>%
-      layout(title = 'Years Programming',
-             xaxis = list(showgrid = FALSE, zeroline = FALSE, showticklabels = FALSE),
-             yaxis = list(showgrid = FALSE, zeroline = FALSE, showticklabels = FALSE))
+    plot_ly(years, labels = years$YearsProgram, values = years$total, type = 'pie')
   })
 })
